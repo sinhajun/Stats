@@ -4,15 +4,14 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerJoinEvent
 
-class LoadConfigFile : Listener {
-
+class LoadConfigFile: Listener {
     @EventHandler
     fun onJoin(event: PlayerJoinEvent) {
-        val config = Stats().config
-        if (config.get(event.player.name) == null) config.set(event.player.name, arrayListOf(0, 0, 0))
+        val player = event.player
+        if (configuration[player.name] == null) configuration[player.name] = arrayListOf(0, 0, 0)
 
-        StatsMap.hotMap[event.player] = config.getList(event.player.name)!![0] as Int
-        StatsMap.coldMap[event.player] = config.getList(event.player.name)!![1] as Int
-        StatsMap.thirstyMap[event.player] = config.getList(event.player.name)!![2] as Int
+        StatsMap.hotMap[player] = configuration.getList(player.name)!![0] as Int
+        StatsMap.coldMap[player] = configuration.getList(player.name)!![1] as Int
+        StatsMap.thirstyMap[player] = configuration.getList(player.name)!![2] as Int
     }
 }
