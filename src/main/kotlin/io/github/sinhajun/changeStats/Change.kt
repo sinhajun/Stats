@@ -28,18 +28,67 @@ class Change: Listener {
                     }
                 }
             }
-        }.runTaskTimer(stats, 1L, 0L)
+        }.runTaskTimer(stats, ((10..25).random() * 20).toLong(), ((10..25).random() * 20).toLong())
+
+        object : BukkitRunnable() {
+            override fun run() {
+                Bukkit.getOnlinePlayers().forEach {player ->
+                    if (player != null) {
+                        if (StatsMap.hotMap[player]!! < 0) StatsMap.hotMap[player] = 0
+                        if (StatsMap.coldMap[player]!! < 0) StatsMap.coldMap[player] = 0
+                        if (StatsMap.thirstyMap[player]!! < 0) StatsMap.thirstyMap[player] = 0
+                    }
+                }
+            }
+        }
     }
 
     private fun climateChange(player: Player) {
-        if (polarClimate.contains(player.world.getBiome(player.location.add(0.0, 0.0, 0.0)))) {
-            val hotRandomValue = (3..4).random()
-            val coldRandomValue = (3..4).random()
+        val biome = player.world.getBiome(player.location.add(0.0, 0.0, 0.0))
 
-            if (StatsMap.hotMap[player]!! - hotRandomValue > 0) StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
-            if (StatsMap.coldMap[player]!! + coldRandomValue < 40) StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
-            if (StatsMap.thirstyMap[player]!! + 1 <= 40) StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + 1
+        when {
+            polarClimate.contains(biome) -> { // 한대기후
+                val hotRandomValue = (1..4).random()
+                val coldRandomValue = (1..4).random()
+                val thirstyRandomValue = (1..2).random()
 
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + thirstyRandomValue
+            }
+            coldClimate.contains(biome) -> { // 냉대기후
+                val hotRandomValue = (1..3).random()
+                val coldRandomValue = (1..3).random()
+
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + 1
+            }
+            temperateClimate.contains(biome) -> { // 온대기후
+                val hotRandomValue = (1..2).random()
+                val coldRandomValue = (1..2).random()
+
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + 1
+            }
+            tropicalClimate.contains(biome) -> { // 열대기후
+                val hotRandomValue = (1..3).random()
+                val coldRandomValue = (1..3).random()
+
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                if (StatsMap.thirstyMap[player]!! + 1 <= 40) StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + 1
+            }
+            dryClimate.contains(biome) -> { // 건조기후
+                val hotRandomValue = (1..4).random()
+                val coldRandomValue = (1..4).random()
+                val thirstyRandomValue = (1..3).random()
+
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + thirstyRandomValue
+            }
         }
     }
 
