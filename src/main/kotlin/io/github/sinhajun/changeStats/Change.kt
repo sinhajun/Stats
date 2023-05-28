@@ -35,9 +35,9 @@ class Change: Listener {
             override fun run() {
                 Bukkit.getOnlinePlayers().forEach {player ->
                     if (player != null) {
-                        if (StatsMap.hotMap[player]!! < 0) StatsMap.hotMap[player] = 0 else if (StatsMap.hotMap[player]!! > maxStat) StatsMap.hotMap[player] = 40
-                        if (StatsMap.coldMap[player]!! < 0) StatsMap.coldMap[player] = 0 else if (StatsMap.coldMap[player]!! > maxStat) StatsMap.coldMap[player] = 40
-                        if (StatsMap.thirstyMap[player]!! < 0) StatsMap.thirstyMap[player] = 0 else if (StatsMap.thirstyMap[player]!! > maxStat) StatsMap.thirstyMap[player] = 40
+                        if (StatsMap.hotMap[player]!! < 0) StatsMap.hotMap[player] = 0 else if (StatsMap.hotMap[player]!! > maxStat) StatsMap.hotMap[player] = 50
+                        if (StatsMap.coldMap[player]!! < 0) StatsMap.coldMap[player] = 0 else if (StatsMap.coldMap[player]!! > maxStat) StatsMap.coldMap[player] = 50
+                        if (StatsMap.thirstyMap[player]!! < 0) StatsMap.thirstyMap[player] = 0 else if (StatsMap.thirstyMap[player]!! > maxStat) StatsMap.thirstyMap[player] = 50
                     }
                 }
             }
@@ -84,10 +84,10 @@ class Change: Listener {
             dryClimate.contains(biome) -> { // 건조기후
                 val hotRandomValue = (0..4).random()
                 val coldRandomValue = (0..4).random()
-                val thirstyRandomValue = (0..3).random()
+                val thirstyRandomValue = (0..2).random()
 
-                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - hotRandomValue
-                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! + coldRandomValue
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! + hotRandomValue
+                StatsMap.coldMap[player] = StatsMap.coldMap[player]!! - coldRandomValue
                 StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! + thirstyRandomValue
             }
         }
@@ -115,6 +115,7 @@ class Change: Listener {
             if (event.item.type == Material.MILK_BUCKET || event.item.type == Material.POTION) {
                 val player = event.player
                 StatsMap.thirstyMap[player] = StatsMap.thirstyMap[player]!! - (10..15).random()
+                StatsMap.hotMap[player] = StatsMap.hotMap[player]!! - (3..7).random()
             }
         }
     }

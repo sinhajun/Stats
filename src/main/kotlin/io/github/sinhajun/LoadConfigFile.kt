@@ -9,7 +9,6 @@ import java.io.IOException
 
 class LoadConfigFile: Listener {
 
-    //TODO config 파일 저장 안되는 버그 고치기
     @EventHandler
     fun load(event: PlayerJoinEvent) {
         val player = event.player
@@ -23,13 +22,16 @@ class LoadConfigFile: Listener {
     }
     @EventHandler
     fun save(event: PlayerQuitEvent) {
-        val player = event.player
-        val configuration = YamlConfiguration.loadConfiguration(configurationFile)
-
-        configuration[player.name] = arrayListOf(StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!!)
-
         try {
-            configuration.save(configurationFile)
-        } catch (e: IOException) { e.printStackTrace() }
+            val player = event.player
+            val configuration = YamlConfiguration.loadConfiguration(configurationFile)
+
+            configuration[player.name] = arrayListOf(StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!!)
+
+            try {
+                configuration.save(configurationFile)
+                stats.logger.info("저장함")
+            } catch (e: IOException) { e.printStackTrace() }
+        } catch (ignored: NullPointerException) {}
     }
 }

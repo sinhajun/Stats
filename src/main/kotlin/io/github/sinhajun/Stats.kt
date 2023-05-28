@@ -14,7 +14,7 @@ lateinit var stats: JavaPlugin
 
 class Stats: JavaPlugin() {
     override fun onEnable() {
-        configurationFile = File("", "stats.yml")
+        configurationFile = File("plugins/stats", "config.yml")
         stats = this
         val listenerList = arrayOf(LoadConfigFile(), Show(), Change(), Damage())
 
@@ -25,13 +25,15 @@ class Stats: JavaPlugin() {
 
     override fun onDisable() {
         Bukkit.getOnlinePlayers().forEach {player ->
-            val configuration = YamlConfiguration.loadConfiguration(configurationFile)
-
-            configuration[player.name] = arrayListOf(StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!!)
-
             try {
-                configuration.save(configurationFile)
-            } catch (e: IOException) { e.printStackTrace() }
+                val configuration = YamlConfiguration.loadConfiguration(configurationFile)
+
+                configuration[player.name] = arrayListOf(StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!!)
+
+                try {
+                    configuration.save(configurationFile)
+                } catch (e: IOException) { e.printStackTrace() }
+            } catch (ignored: NullPointerException) {}
         }
     }
 }

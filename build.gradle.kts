@@ -4,7 +4,7 @@ plugins {
 }
 
 group = "io.github.sinhajun"
-version = "0.0.1"
+version = "1.0.0"
 
 repositories {
     mavenCentral()
@@ -38,7 +38,7 @@ tasks.processResources {
 tasks.register("copyPlugin", Copy::class) {
     doFirst { println("copying built plugin ...") }
 
-    from("build/libs/" + "Stats-0.0.1.jar") // 예 : paper-sample-0.0.1.jar
+    from("build/libs/" + "Stats-1.0.0.jar") // 예 : paper-sample-0.0.1.jar
     into("C:/Users/s7302/IdeaProjects/MinecraftServer/PluginServer/plugins") // 예: ~/PluginServer/plugins
 
     doLast { println("copied built plugin!") }

@@ -15,16 +15,15 @@ class Damage: Listener {
     @EventHandler
     fun onDamage(event: PlayerJoinEvent) {
         val player = event.player
-        when (maxStat) {
-            StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!! -> {
-                object : BukkitRunnable() {
-                    override fun run() {
+        object : BukkitRunnable() {
+            override fun run() {
+                when (maxStat) {
+                    StatsMap.hotMap[player]!!, StatsMap.coldMap[player]!!, StatsMap.thirstyMap[player]!! -> {
                         player.damage(damage)
                     }
-                }.runTaskTimer(stats, 0L, 20L)
+                }
             }
-        }
-
+        }.runTaskTimer(stats, 0L, 20L)
     }
 
     @EventHandler
